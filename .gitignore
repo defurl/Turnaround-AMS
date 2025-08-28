@@ -38,3 +38,4 @@ yarn-error.*
 
 # db
 db/serviceAccountKey.json
+db/serviceAccountKey.json

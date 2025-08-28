@@ -1,3 +1,7 @@
+// Modal for reporting task delays.
+// Features: Reason input, estimated delay time, validation, submit/cancel actions.
+// Used in: ChecklistScreen for delay reporting workflow.
+
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Modal, Alert } from 'react-native';
 

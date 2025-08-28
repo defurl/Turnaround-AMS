@@ -1,3 +1,8 @@
+// Main dashboard for viewing assigned turnarounds (flights).
+// Workflow: Loads user data, fetches turnarounds from Firestore based on user role.
+// Features: Role-based filtering (supervisor sees all, others see assigned), deduplication, real-time updates.
+// UI: Renders FlightCard components for each turnaround, shows progress and status.
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import { collection, query, where, onSnapshot, doc, getDoc } from 'firebase/firestore';

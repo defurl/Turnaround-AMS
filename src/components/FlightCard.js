@@ -1,3 +1,7 @@
+// Visual card for displaying flight/turnaround summary.
+// Features: Status color-coding, flight details, progress bar, delay indicator.
+// Used in: HomeScreen dashboard.
+
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 

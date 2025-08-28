@@ -1,3 +1,8 @@
+// Displays and manages tasks for a selected turnaround (flight).
+// Workflow: Loads tasks from Firestore, allows marking as completed, delayed, or pending.
+// Features: Role-based task actions, delay reporting (with modal), progress tracking, real-time updates.
+// UI: Shows flight info, progress bar, task list with status indicators, delay details.
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Alert } from 'react-native';
 import { collection, query, orderBy, onSnapshot, doc, updateDoc } from 'firebase/firestore';
@@ -29,16 +34,52 @@ const ChecklistScreen = ({ turnaround, onBack, currentUser }) => {
       return;
     }
     setSelectedTask(task);
+
+    // Choose actions based on current status
+    // Push actions into an array to display
+    let actions = [{ text: 'Cancel', style: 'cancel' }];
+
+    if (task.status === 'Delayed') {
+      actions.push({
+        text: 'Mark as Pending',
+        onPress: () => toggleTaskPending(task),
+      });
+    } else {
+      actions.push({
+        text: 'Mark as Delayed',
+        onPress: () => setModalVisible(true),
+        style: 'destructive',
+      });
+    }
+
+    actions.push({
+      text: `Mark as ${task.status === 'Completed' ? 'Pending' : 'Completed'}`,
+      onPress: () => toggleTaskCompletion(task),
+    });
+
     Alert.alert(
       `Update Task: ${task.name}`,
       'Choose an action for this task.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Mark as Delayed', onPress: () => setModalVisible(true), style: 'destructive' },
-        { text: `Mark as ${task.status === 'Completed' ? 'Pending' : 'Completed'}`, onPress: () => toggleTaskCompletion(task) },
-      ]
+      actions
     );
   };
+
+  // Deal with pending task, 
+  const toggleTaskPending = async (task) => {
+    const taskRef = doc(db, 'turnarounds', turnaround.id, 'tasks', task.id);
+    const isPending = task.status !== 'Pending';
+    await updateDoc(taskRef, {
+      status: 'Pending',
+      isDelayed: false,
+      delayReason: null,
+      delayTimestamp: null,
+      estimatedDelayMinutes: null,
+      reportedBy: null,
+      completedBy: null,
+      completionTime: null,
+    });
+    setSelectedTask(null);
+  }
 
   const toggleTaskCompletion = async (task) => {
     const taskRef = doc(db, 'turnarounds', turnaround.id, 'tasks', task.id);
@@ -151,9 +192,9 @@ const ChecklistScreen = ({ turnaround, onBack, currentUser }) => {
                     <Text className={`text-lg ${isCompleted ? 'text-gray-500 line-through' : 'text-white'}`}>{task.name}</Text>
                     <Text className="text-gray-400 text-sm">Assigned to: {task.assignedTo.name}</Text>
                   </View>
-                  <View className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${isCompleted ? 'bg-green-500 border-green-500' : 'border-gray-400'}`}>
+                  <View className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${isCompleted ? 'bg-green-500 border-green-500' : ( isDelayed ? 'bg-red-500 border-red-500' : 'border-gray-100')}`}>
                     {isCompleted && <Text className="text-white font-bold">✓</Text>}
-                    {isDelayed && <AlertTriangle color="#ef4444" size={18} />}
+                    {isDelayed && <Text className="text-white font-bold">!</Text>}
                   </View>
                 </View>
                 {isDelayed && (

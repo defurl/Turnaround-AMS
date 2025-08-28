@@ -1,3 +1,20 @@
+// App.js
+// Main entry point for Turnaround-AMS React Native app.
+// Handles authentication state, user data loading, and navigation between screens.
+// Uses modular architecture: screens and components are imported from src/.
+// Workflow: On launch, checks auth state, loads user data, and renders AuthScreen, HomeScreen, or ChecklistScreen based on state.
+// Features: Real-time updates, role-based access, progress tracking, delay reporting.
+// Styling: Uses NativeWind (Tailwind CSS for React Native).
+//
+// See src/screens/ for main screens and src/components/ for reusable UI components.
+//
+// For Firebase config, see src/config/firebase.js.
+// For styling config, see tailwind.config.js and babel.config.js.
+//
+// For database scripts, see db/.
+//
+// For more details, see README.md.
+
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, ActivityIndicator, StatusBar, StyleSheet } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';

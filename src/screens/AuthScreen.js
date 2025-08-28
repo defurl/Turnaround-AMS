@@ -1,3 +1,8 @@
+// Handles user authentication (login) workflow.
+// Features: Email/password login, error handling, network checks, debug mode for development.
+// Workflow: On login, authenticates with Firebase Auth, loads user data, and transitions to dashboard.
+// UI: Uses NativeWind for styling, provides debug tools for test credentials and user inspection.
+
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, TextInput, Alert, ActivityIndicator, StatusBar, ScrollView } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';

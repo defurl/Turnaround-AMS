@@ -1,3 +1,7 @@
+// Reusable static header component for navigation and user actions.
+// Features: Back navigation, logout, title display, user icon.
+// Used in: All main screens for consistent navigation UI.
+
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { User, ArrowLeft, LogOut } from 'lucide-react-native';

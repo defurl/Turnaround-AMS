@@ -56,7 +56,7 @@ const users = {
   'QB2HAwd0e1PsuLiVLdcn8V81eKs2': { employeeId: 'RAMP001', fullName: 'Bob Ramp', role: 'Ramp Agent', assignedTurnarounds: [] },
   'lRX1iSQrlkfRkaigCrHQxUqQ6w62': { employeeId: 'RAMP002', fullName: 'Charlie Ramp', role: 'Ramp Agent', assignedTurnarounds: [] },
   'yqOVbQwuTIerNx8TQRkY2G5M2mZ2': { employeeId: 'MAINT001', fullName: 'David Maintenance', role: 'Maintenance Engineer', assignedTurnarounds: [] },
-  'Ft4i8A63rYWnFLoWUteKPBls7WD2': { employeeId: 'MAINT002', fullName: 'Frank Maintenance', role: 'Maintenance Engineer', assignedTurnarounds: [] }, // Add a real UID
+  'Ft4i8A63rYWnFLoWUteKPBls7WD2': { employeeId: 'MAINT002', fullName: 'Frank Maintenance', role: 'Maintenance Engineer', assignedTurnarounds: [] },
   'ZiUWfH3UqpbwxNyVMKVOvxakQmz2': { employeeId: 'CAT001', fullName: 'Eve Catering', role: 'Catering', assignedTurnarounds: [] },
 };
 
@@ -140,12 +140,11 @@ async function seedDatabase() {
   log('Starting database seeding...');
   const batch = db.batch();
 
-  // Seed Users (idempotent: will create or update)
   log('Seeding users...');
   for (const [id, data] of Object.entries(users)) {
     if (id.includes('NEW_')) {
         error(`Please replace placeholder UID '${id}' with a real Firebase Auth UID.`);
-        continue; // Skip this user
+        continue;
     }
     const userRef = db.collection('users').doc(id);
     batch.set(userRef, { ...data, assignedTurnarounds: [] }, { merge: true }); // Reset turnarounds
